@@ -7,7 +7,7 @@ class TransactionForm extends StatefulWidget {
     required this.onSubmit,
   });
 
-  final void Function(String title, double value) onSubmit;
+  final void Function(String title, double value, DateTime date) onSubmit;
 
   @override
   State<TransactionForm> createState() => _TransactionFormState();
@@ -18,7 +18,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
   final _valueController = TextEditingController();
 
-  DateTime? _selectedDate;
+  DateTime? _selectedDate = DateTime.now();
 
   _showDatePicker() {
     showDatePicker(
@@ -43,7 +43,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
     if (title.isEmpty || value <= 0) return;
 
-    widget.onSubmit(title, value);
+    widget.onSubmit(title, value, _selectedDate!);
   }
 
   @override

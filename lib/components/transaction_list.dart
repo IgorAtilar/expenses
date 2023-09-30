@@ -7,14 +7,17 @@ class Transactionlist extends StatelessWidget {
   const Transactionlist({
     super.key,
     required this.transactions,
+    required this.onRemoveTransaction,
   });
+
+  final void Function(String id) onRemoveTransaction;
 
   final List<Transaction> transactions;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 300,
+      height: 430,
       child: transactions.isEmpty
           ? Column(
               children: [
@@ -59,6 +62,13 @@ class Transactionlist extends StatelessWidget {
                     ),
                     subtitle: Text(
                       DateFormat('d MMM y').format(transaction.date),
+                    ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        onRemoveTransaction(transaction.id);
+                      },
+                      icon: const Icon(Icons.delete),
+                      color: Theme.of(context).colorScheme.error,
                     ),
                   ),
                 );
