@@ -1,5 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
@@ -103,8 +103,8 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+    bool isLandscape = mediaQuery.orientation == Orientation.landscape;
 
     final appBar = AppBar(
       title: const Text(
@@ -127,9 +127,9 @@ class _HomePage extends State<HomePage> {
       ],
     );
 
-    final avaialableHeight = MediaQuery.of(context).size.height -
+    final avaialableHeight = mediaQuery.size.height -
         appBar.preferredSize.height -
-        MediaQuery.of(context).padding.top;
+        mediaQuery.padding.top;
 
     return Scaffold(
       appBar: appBar,
@@ -146,7 +146,7 @@ class _HomePage extends State<HomePage> {
               ),
             if (!_showChart || !isLandscape)
               SizedBox(
-                height: avaialableHeight * 0.75,
+                height: avaialableHeight * (isLandscape ? 1 : 0.75),
                 child: Transactionlist(
                     transactions: _transactions,
                     onRemoveTransaction: _removeTransaction),
@@ -154,10 +154,12 @@ class _HomePage extends State<HomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () => _openTransactionFormModal(context),
-      ),
+      floatingActionButton: Platform.isIOS
+          ? const SizedBox.shrink()
+          : FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () => _openTransactionFormModal(context),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
